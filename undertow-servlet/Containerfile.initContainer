@@ -1,0 +1,10 @@
+FROM registry.access.redhat.com/ubi8/openjdk-11:latest as builder
+USER root
+COPY ./ /tmp/src
+RUN chown -R 185:0 /tmp/src
+USER 185
+RUN /usr/local/s2i/assemble
+
+FROM registry.access.redhat.com/ubi8/ubi-micro
+COPY --from=builder /deployments /deployments
+CMD echo "Please don't start..."
